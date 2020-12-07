@@ -17,3 +17,7 @@
 - Run command `yarn install`
 - Run command `serverless dynamodb install` to install in memory dynamodb for local test
 - Run command `yarn offline` to run the app locally
+
+### Deploy:
+
+- Run command `yarn deploy` to deploy the app to your AWS infrastructure, make sure you set correct `.env` credentials.

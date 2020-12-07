@@ -8,7 +8,8 @@
   "private": false,
   "scripts": {
     "offline": "serverless offline start",
-    "test": "jest --runInBand --detectOpenHandles"
+    "test": "jest --runInBand --detectOpenHandles",
+    "deploy": "serverless deploy"
   },
   "dependencies": {
     "cors": "^2.8.5",
