@@ -1,0 +1,91 @@
+service: your-service-name
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: "${env:NODE_ENV}"
+  region: "${env:REGION}"
+  profile: "${env:SERVERLESS_PROFILE}"
+  role: "${env:ROLE}"
+  timeout: "${env:SERVERLESS_TIMEOUT}"
+  memorySize: "${env:SERVERLESS_MEMORY}"
+  environment:
+    NODE_ENV: "${env:NODE_ENV}"
+    ROLE: "${env:ROLE}"
+    ACCESS_KEY_ID: "${env:ACCESS_KEY_ID}"
+    SECRET_ACCESS_KEY: "${env:SECRET_ACCESS_KEY}"
+    REGION: "${env:REGION}"
+
+custom:
+  dotenv:
+    path: ./.env
+    basePath: ./
+    logging: true
+
+  dynamodb:
+    stages:
+      - development
+      - test
+      - staging
+      - production
+    start:
+      port: 7000
+      inMemory: true
+      migrate: true
+
+  scripts:
+    hooks:
+      "aws:common:validate:validate": yarn test
+
+package:
+  individually: true
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-dynamodb-local
+  - serverless-plugin-scripts
+
+functions:
+  app:
+    handler: server.handler
+    events:
+      - http:
+          path: "api/v1/health_check"
+          method: GET
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - access-token
+            allowCredentials: false
+
+resources:
+  Resources:
+    usersTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: "${self:provider.stage}-users"
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: userName
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: userName
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        GlobalSecondaryIndexes:
+          - IndexName: "userName-index"
+            KeySchema:
+              - AttributeName: userName
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL

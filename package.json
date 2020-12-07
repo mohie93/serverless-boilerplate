@@ -1,0 +1,30 @@
+{
+  "name": "nodjs-rest",
+  "version": "1.0.0",
+  "description": "REST API via serverless archetecutre based on backEnd as a service approach",
+  "main": "server.js",
+  "author": "<mohie_93@hotmail.com> mohie93",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "offline": "serverless offline start",
+    "test": "jest --runInBand --detectOpenHandles"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "serverless-http": "^2.5.0",
+    "uuid": "^8.3.0"
+  },
+  "devDependencies": {
+    "@shelf/jest-dynamodb": "^1.7.0",
+    "aws-sdk": "^2.729.0",
+    "jest": "^26.4.0",
+    "serverless-dotenv-plugin": "^3.0.0",
+    "serverless-dynamodb-local": "^0.2.39",
+    "serverless-offline": "6.1.5",
+    "serverless-plugin-scripts": "^1.0.2",
+    "supertest": "^4.0.2"
+  }
+}
